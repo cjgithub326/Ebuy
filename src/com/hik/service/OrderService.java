@@ -49,6 +49,21 @@ public interface OrderService {
 	
 	/**
 	 * 
+	 * @MethodName: getOrderCount
+	 * @Description: 获取订单数量
+	 * @author jed
+	 * @date 2017年5月29日下午3:36:45
+	 * @param @param order
+	 * @param @return    
+	 * @return Long    返回类型
+	 * @param order
+	 * @return
+	 *
+	 */
+	public Long getOrderCount(Order order);
+	
+	/**
+	 * 
 	 * @MethodName: updateOrderStatus
 	 * @Description: 更新订单状态
 	 * @author jed

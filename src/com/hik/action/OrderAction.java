@@ -17,7 +17,10 @@ import org.springframework.stereotype.Controller;
 
 import com.hik.entity.Order;
 import com.hik.entity.OrderProduct;
+import com.hik.entity.PageBean;
 import com.hik.entity.Product;
+import com.hik.entity.ProductBigType;
+import com.hik.entity.ProductSmallType;
 import com.hik.entity.ShoppingCart;
 import com.hik.entity.ShoppingCartItem;
 import com.hik.entity.User;
@@ -28,7 +31,9 @@ import com.hik.util.ResponseUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.ResolverUtil.NameEndsWith;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 
 /**
  * @ClassName: OrderAction
@@ -56,6 +61,10 @@ public class OrderAction extends ActionSupport implements ServletRequestAware{
 	private int status;
 	
 	private String orderNo;
+	
+	private String page;
+	
+	private String rows;
 	
 	private List<Order> orderList;
 	
@@ -153,6 +162,34 @@ public class OrderAction extends ActionSupport implements ServletRequestAware{
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @MethodName: list
+	 * @Description: 查询订单
+	 * @author jed
+	 * @date 2017年5月29日下午3:55:22
+	 * @param @return    
+	 * @return String    返回类型
+	 * @return
+	 * @throws Exception 
+	 *
+	 */
+	public String list() throws Exception{
+		PageBean pageBean = new PageBean(Integer.parseInt(page), Integer.parseInt(rows));
+		List<Order> orderList = orderService.findOrder(order, pageBean);
+		long total = orderService.getOrderCount(order);
+		JsonConfig jsonConfig = new JsonConfig();
+		jsonConfig.setExcludes(new String[]{"orderProductList"}); //去除要排除的属性   前台不展示
+		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new DateJsonValueProcessor("yyyy-MM-dd")); //日期处理
+		jsonConfig.registerJsonValueProcessor(User.class, new ObjectJsonValueProcessor(new String[]{"id","userName"}, User.class));//用户id和name
+		JSONArray rows = JSONArray.fromObject(orderList, jsonConfig);
+		JSONObject result = new JSONObject();
+		result.put("rows", rows);
+		result.put("total", total);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
@@ -205,6 +242,22 @@ public class OrderAction extends ActionSupport implements ServletRequestAware{
 	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
 	}
-	
+
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
+	}
+
+	public String getRows() {
+		return rows;
+	}
+
+	public void setRows(String rows) {
+		this.rows = rows;
+	}
+
 
 }

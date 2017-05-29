@@ -61,7 +61,7 @@
 				<a href="javaScript:openTab('商品小类管理','productSmallTypeManage.jsp','icon-product')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理商品小类</a>
 			</div>
 			<div title="订单管理" data-options="iconCls:'icon-order'" style="padding: 10px;">
-				<a href="" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理订单</a>
+				<a href="javaScript:openTab('订单管理','orderManage.jsp','icon-order')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理订单</a>
 			</div>
 			<div title="留言管理" data-options="iconCls:'icon-comment'" style="padding: 10px;">
 				<a href="" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理留言</a>

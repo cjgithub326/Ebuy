@@ -48,10 +48,14 @@ public class OrderServiceImpl implements OrderService{
 				hql.append(" and orderNo like ?");
 				param.add("%"+order.getOrderNo().trim()+"%");
 			}
+			if(order.getUser()!=null && StringUtil.isNotEmpty(order.getUser().getUserName())){
+				hql.append(" and user.userName like ?");
+				param.add("%"+order.getUser().getUserName()+"%");
+			}
 		}
 		hql.append(" order by createTime desc");
 		if(pageBean!=null){
-			return null;
+			return baseDao.find(hql.toString().replaceFirst("and", "where"), param, pageBean);
 		}else{
 			return baseDao.find(hql.toString().replaceFirst("and", "where"), param);
 		}
@@ -64,6 +68,27 @@ public class OrderServiceImpl implements OrderService{
 		param.add(status);
 		param.add(orderNo);
 		baseDao.executeHql(hql.toString(), param);
+	}
+
+	@Override
+	public Long getOrderCount(Order order) {
+		List<Object> param = new LinkedList<Object>();
+		StringBuffer sb = new StringBuffer("select count(*) from Order");
+		if(order!=null){
+			if(order.getUser()!=null && order.getUser().getId()!=0){
+				sb.append(" and user.id = ?");
+				param.add(order.getUser().getId());
+			}
+			if(StringUtil.isNotEmpty(order.getOrderNo())){
+				sb.append(" and orderNo like ?");
+				param.add("%"+order.getOrderNo().trim()+"%");
+			}
+			if(order.getUser()!=null && StringUtil.isNotEmpty(order.getUser().getUserName())){
+				sb.append(" and user.userName like ?");
+				param.add("%"+order.getUser().getUserName()+"%");
+			}
+		}
+		return baseDao.count(sb.toString().replaceFirst("and", "where"), param);
 	}
 
 }
