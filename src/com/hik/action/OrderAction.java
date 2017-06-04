@@ -28,8 +28,10 @@ import com.hik.service.OrderService;
 import com.hik.util.DateUtil;
 import com.hik.util.NavUtil;
 import com.hik.util.ResponseUtil;
+import com.hik.util.StringUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.util.ResolverUtil.NameEndsWith;
+import com.sun.jmx.snmp.SnmpString;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -67,6 +69,10 @@ public class OrderAction extends ActionSupport implements ServletRequestAware{
 	private String rows;
 	
 	private List<Order> orderList;
+	
+	private String orderId;
+	
+	private String orderNos;
 	
 	@Resource
 	private OrderService orderService;
@@ -190,6 +196,65 @@ public class OrderAction extends ActionSupport implements ServletRequestAware{
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @MethodName: findProductListByOrderId
+	 * @Description: 根据订单id查询订单详情
+	 * @author jed
+	 * @date 2017年6月4日上午9:48:47
+	 * @param @return    
+	 * @return String    返回类型
+	 * @return
+	 * @throws Exception 
+	 *
+	 */
+	public String findProductListByOrderId() throws Exception{
+		if(StringUtil.isEmpty(orderId)){
+			return null;
+		}
+		Order order = orderService.getOrderById(Integer.parseInt(orderId));
+		List<OrderProduct> orderProductList = order.getOrderProductList();
+		JSONObject result = new JSONObject();
+		JSONArray rows = new JSONArray();
+		for(OrderProduct orderProduct:orderProductList){
+			Product product = orderProduct.getProduct();
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("productName", product.getName());
+			jsonObject.put("proPic", product.getProPic());
+			jsonObject.put("price", product.getPrice());
+			jsonObject.put("num", orderProduct.getNum());
+			jsonObject.put("subtotal", product.getPrice()*orderProduct.getNum());
+			rows.add(jsonObject);
+		}
+		result.put("rows", rows);
+		result.put("total", rows.size());
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @MethodName: modifyOrderStatus
+	 * @Description: 修改订单状态
+	 * @author jed
+	 * @date 2017年6月4日下午12:02:46
+	 * @param @return    
+	 * @return String    返回类型
+	 * @return
+	 * @throws Exception 
+	 *
+	 */
+	public String modifyOrderStatus() throws Exception{
+		String[] orderNoStr = orderNos.split(",");
+		for(int i=0;i<orderNoStr.length;i++){
+			orderService.updateOrderStatus(status, orderNoStr[i]);
+		}
+		JSONObject result = new JSONObject();
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
 	@Override
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
@@ -258,6 +323,23 @@ public class OrderAction extends ActionSupport implements ServletRequestAware{
 	public void setRows(String rows) {
 		this.rows = rows;
 	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public String getOrderNos() {
+		return orderNos;
+	}
+
+	public void setOrderNos(String orderNos) {
+		this.orderNos = orderNos;
+	}
+
 
 
 }

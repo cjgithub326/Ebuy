@@ -76,5 +76,20 @@ public interface OrderService {
 	 *
 	 */
 	public void updateOrderStatus(int status,String orderNo); 
+	
+	/**
+	 * 
+	 * @MethodName: getOrderById
+	 * @Description: 根据订单id获取订单
+	 * @author jed
+	 * @date 2017年6月4日上午9:21:13
+	 * @param @param id
+	 * @param @return    
+	 * @return Order    返回类型
+	 * @param id
+	 * @return
+	 *
+	 */
+	public Order getOrderById(int id);
 
 }

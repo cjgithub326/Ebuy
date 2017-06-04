@@ -41,6 +41,64 @@
 	 }
 	 return "";
  } 
+  
+  function formatProPic(val,row){
+		return "<img width=100 height=100 src='${pageContext.request.contextPath}/"+val+"'>";
+	}
+  
+  function openOrderDetailDialog(){
+	  var selectedRows =$("#dg").datagrid('getSelections');
+	  if(selectedRows.length!=1){
+		  $.messager.alert("系统提示","请选择一条要查看的数据！");
+		  return;
+	  }
+	  var row = selectedRows[0];
+	  $("#dg2").datagrid('load',{"orderId":row.id}); 
+	  $("#orderNO").val(row.orderNo);
+	  $("#user").val(row.user.userName + "(ID:"+row.user.id+")");
+	  $("#cost").val(row.cost+"(元)");
+	  var v = row.status;
+	  if(v==1){
+		  $("#status").val("待审核");
+	  }else if(v==2){
+		  $("#status").val("审核通过");
+	  }else if(v==3){
+		  $("#status").val("卖家已发货");
+	  }else if(v==4){
+		  $("#status").val("交易已完成");
+	  }
+	  $("#dlg").dialog("open").dialog("setTitle","订单详情");
+  }
+  
+  function closeOrderDetailDialog(){
+	  $("#dlg").dialog("close");
+  }
+  
+  function modifyOrderStatus(status){
+	  var selectedRows=$("#dg").datagrid('getSelections');
+		if(selectedRows.length==0){
+			$.messager.alert("系统提示","请选择要处理的数据！");
+			return;
+		}
+		var orderNosStr=[];
+		for(var i=0;i<selectedRows.length;i++){
+			orderNosStr.push(selectedRows[i].orderNo);
+		}
+		var orderNos=orderNosStr.join(",");
+		$.messager.confirm("系统提示","您确认要处理这<font color=red>"+selectedRows.length+"</font>条数据吗？",function(r){
+			if(r){
+				$.post("order_modifyOrderStatus.action",{orderNos:orderNos,status:status},function(result){
+					if(result.success){
+						$.messager.alert("系统提示","数据已成功处理！");
+						$("#dg").datagrid("reload");
+					}else{
+						$.messager.alert("系统提示","数据处理失败！");
+					}
+				},"json");
+			}
+		});
+  }
+  
 </script>
 </head>
 <body style="margin: 1px;">
@@ -60,15 +118,54 @@
 	</table>
 	<div id="tb">
 		<div>
-			<a href="javaScript:openOrderAddDialog()" class="easyui-linkbutton" iconCls="icon-detail" plain="true">查看订单详情</a>
-			<a href="javaScript:openOrderModifyDialog()" class="easyui-linkbutton" iconCls="icon-shenhe" plain="true">审核通过</a>
-			<a href="javaScript:deleteOrder()" class="easyui-linkbutton" iconCls="icon-fahuo" plain="true">卖家已发货</a>
+			<a href="javaScript:openOrderDetailDialog()" class="easyui-linkbutton" iconCls="icon-detail" plain="true">查看订单详情</a>
+			<a href="javaScript:modifyOrderStatus(2)" class="easyui-linkbutton" iconCls="icon-shenhe" plain="true">审核通过</a>
+			<a href="javaScript:modifyOrderStatus(3)" class="easyui-linkbutton" iconCls="icon-fahuo" plain="true">卖家已发货</a>
 		</div>
 		<div>
 			&nbsp;订单号：&nbsp;<input type="text" id="orderNo" size="20"/>
 			&nbsp;订单人：&nbsp;<input type="text" id="userName" size="20"/>
 			<a href="javaScript:searchOrder()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
 		</div>
+	</div>
+	
+	<div id="dlg" class="easyui-dialog" style="width: 750px;height:550px;padding: 10px 30px"
+	  closed="true" buttons="#dlg-buttons">
+		<table cellspacing="8px">
+			<tr>
+				<td>订单号：</td>
+				<td><input type="text" id="orderNO" readonly="readonly"/></td>
+				<td>&nbsp;</td>
+				<td>订单人：</td>
+				<td><input type="text" id="user" readonly="readonly"/></td>
+			</tr>
+			<tr>
+				<td>总金额：</td>
+				<td><input type="text" id="cost" readonly="readonly"/></td>
+				<td>&nbsp;</td>
+				<td>订单状态：</td>
+				<td><input type="text" id="status" readonly="readonly"/></td>
+			</tr>
+		</table>
+		<br/>
+		<table id="dg2" title="订单商品列表" class="easyui-datagrid"
+		 fitColumns="true"  rownumbers="true"
+		 url="order_findProductListByOrderId.action" fit="true" >
+		 <thead>
+		 	<tr>
+		 		<th field="cb" checkbox="true" align="center"></th>
+		 		<th field="productName" width="100" align="center">商品名称</th>
+		 		<th field="proPic" width="100" align="center" formatter="formatProPic">商品图片</th>
+		 		<th field="price" width="50" align="center">商品价格</th>
+		 		<th field="num" width="50" align="center">商品数量</th>
+		 		<th field="subtotal" width="50" align="center">小计</th>
+		 	</tr>
+		 </thead>
+		</table>
+	</div>
+	
+	<div id="dlg-buttons">
+		<a href="javascript:closeOrderDetailDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
 	</div>
 </body>
 </html>

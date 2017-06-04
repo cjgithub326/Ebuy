@@ -91,4 +91,9 @@ public class OrderServiceImpl implements OrderService{
 		return baseDao.count(sb.toString().replaceFirst("and", "where"), param);
 	}
 
+	@Override
+	public Order getOrderById(int id) {
+		return baseDao.get(Order.class, id);
+	}
+
 }
