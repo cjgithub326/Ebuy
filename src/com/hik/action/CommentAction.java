@@ -9,6 +9,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.ServletRequestAware;
 import org.springframework.stereotype.Controller;
 
@@ -17,8 +18,13 @@ import com.hik.entity.PageBean;
 import com.hik.service.CommentService;
 import com.hik.util.NavUtil;
 import com.hik.util.PageUtil;
+import com.hik.util.ResponseUtil;
 import com.hik.util.StringUtil;
 import com.opensymphony.xwork2.ActionSupport;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 
 /**
  * @ClassName: CommentAction
@@ -38,6 +44,8 @@ public class CommentAction extends ActionSupport implements ServletRequestAware{
 	private HttpServletRequest request;
 	
 	private String page;
+	
+	private String rows;
 	
 	private String pageCode;
 	
@@ -98,6 +106,33 @@ public class CommentAction extends ActionSupport implements ServletRequestAware{
 		return "save";
 	}
 	
+	/**
+	 * 
+	 * @MethodName: listComment
+	 * @Description: 分页获取留言
+	 * @author jed
+	 * @date 2017年6月4日下午10:14:12
+	 * @param @return    
+	 * @return String    返回类型
+	 * @return
+	 * @throws Exception 
+	 *
+	 */
+	public String listComment() throws Exception{
+		PageBean pageBean = new PageBean(Integer.parseInt(page), Integer.parseInt(rows));
+		List<Comment> commentList = commentService.getCommentList(comment, pageBean);
+		long total  = commentService.getCommentCount(comment);
+		JsonConfig jsonConfig = new JsonConfig();
+		jsonConfig.registerJsonValueProcessor(java.util.Date.class, new DateJsonValueProcessor("yyyy-MM-dd"));
+		JSONArray rows = JSONArray.fromObject(commentList, jsonConfig);
+		JSONObject result = new JSONObject();
+		result.put("rows", rows);
+		result.put("total", total);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	
 	public String getPage() {
 		return page;
 	}
@@ -145,6 +180,14 @@ public class CommentAction extends ActionSupport implements ServletRequestAware{
 
 	public void setCommentSave(Comment commentSave) {
 		this.commentSave = commentSave;
+	}
+
+	public String getRows() {
+		return rows;
+	}
+
+	public void setRows(String rows) {
+		this.rows = rows;
 	}
 	
 	
