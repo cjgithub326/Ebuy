@@ -65,4 +65,14 @@ public class CommentServiceImpl implements CommentService{
 		baseDao.merge(comment);
 	}
 
+	@Override
+	public Comment getCommentById(int commentId) {
+		return baseDao.get(Comment.class, commentId);
+	}
+
+	@Override
+	public void delete(Comment comment) {
+		baseDao.delete(comment);
+	}
+
 }

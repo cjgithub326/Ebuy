@@ -63,5 +63,33 @@ public interface CommentService {
 	 *
 	 */
 	public void save(Comment comment);
+	
+	/**
+	 * 
+	 * @MethodName: getCommentById
+	 * @Description: 更加id获取留言
+	 * @author jed
+	 * @date 2017年6月18日下午2:43:03
+	 * @param @param commentId
+	 * @param @return    
+	 * @return Comment    返回类型
+	 * @param commentId
+	 * @return
+	 *
+	 */
+	public Comment getCommentById(int commentId);
+	
+	/**
+	 * 
+	 * @MethodName: delete
+	 * @Description: 删除留言
+	 * @author jed
+	 * @date 2017年6月18日下午2:43:36
+	 * @param @param comment    
+	 * @return void    返回类型
+	 * @param comment
+	 *
+	 */
+	public void delete(Comment comment);
 
 }

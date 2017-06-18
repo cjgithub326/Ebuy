@@ -57,6 +57,10 @@ public class CommentAction extends ActionSupport implements ServletRequestAware{
 	
 	private Comment commentSave;
 	
+	private int commentId;
+	
+	private String ids;
+	
 	@Resource
 	private CommentService commentService;
 	
@@ -132,6 +136,72 @@ public class CommentAction extends ActionSupport implements ServletRequestAware{
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @MethodName: loadCommentById
+	 * @Description: 根据id获取留言
+	 * @author jed
+	 * @date 2017年6月18日下午2:54:26
+	 * @param @return    
+	 * @return String    返回类型
+	 * @return
+	 * @throws Exception 
+	 *
+	 */
+	public String loadCommentById() throws Exception{
+		Comment comment = commentService.getCommentById(commentId);
+	    JsonConfig jsonConfig = new JsonConfig();
+	    jsonConfig.registerJsonValueProcessor(java.util.Date.class, new DateJsonValueProcessor("yyyy-MM-dd"));
+	    JSONObject result = JSONObject.fromObject(comment, jsonConfig);
+	    ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @MethodName: replay
+	 * @Description: 回复留言
+	 * @author jed
+	 * @date 2017年6月18日下午3:03:53
+	 * @param @return    
+	 * @return String    返回类型
+	 * @return
+	 * @throws Exception 
+	 *
+	 */
+	public String replay() throws Exception{
+		comment.setReplyTime(new Date()); //设置回复日期
+		commentService.save(comment);
+		JSONObject result = new JSONObject();
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @MethodName: delete
+	 * @Description: 删除留言
+	 * @author jed
+	 * @date 2017年6月18日下午3:12:32
+	 * @param @return
+	 * @param @throws Exception    
+	 * @return String    返回类型
+	 * @return
+	 * @throws Exception
+	 *
+	 */
+	public String delete() throws Exception{
+		JSONObject result = new JSONObject();
+		String[] idsStr = ids.split(",");
+		for(int i=0;i<idsStr.length;i++){
+			Comment comment = commentService.getCommentById(Integer.parseInt(idsStr[i]));
+			commentService.delete(comment);
+		}
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
 	
 	public String getPage() {
 		return page;
@@ -188,6 +258,22 @@ public class CommentAction extends ActionSupport implements ServletRequestAware{
 
 	public void setRows(String rows) {
 		this.rows = rows;
+	}
+
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+
+	public int getCommentId() {
+		return commentId;
+	}
+
+	public void setCommentId(int commentId) {
+		this.commentId = commentId;
 	}
 	
 	
