@@ -48,4 +48,45 @@ public interface NoticeService {
 	 *
 	 */
 	public Notice getNoticeById(int noticeId);
+	
+	/**
+	 * 
+	 * @MethodName: getNoticeCount
+	 * @Description: 获取公告总数
+	 * @author jed
+	 * @date 2017年6月24日下午8:35:45
+	 * @param @param notice
+	 * @param @return    
+	 * @return Long    返回类型
+	 * @param notice
+	 * @return
+	 *
+	 */
+	public Long getNoticeCount(Notice notice);
+	
+	/**
+	 * 
+	 * @MethodName: saveNotice
+	 * @Description: 保存公告信息
+	 * @author jed
+	 * @date 2017年6月24日下午8:36:13
+	 * @param @param notice    
+	 * @return void    返回类型
+	 * @param notice
+	 *
+	 */
+	public void saveNotice(Notice notice);
+	
+	/**
+	 * 
+	 * @MethodName: delete
+	 * @Description: 删除公告信息
+	 * @author jed
+	 * @date 2017年6月24日下午8:36:29
+	 * @param @param notice    
+	 * @return void    返回类型
+	 * @param notice
+	 *
+	 */
+	public void delete(Notice notice);
 } 

@@ -67,7 +67,7 @@
 				<a href="javaScript:openTab('留言管理','commentManage.jsp','icon-comment')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理留言</a>
 			</div>
 			<div title="公告管理" data-options="iconCls:'icon-notice'" style="padding: 10px;">
-				<a href="" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理公告</a>
+				<a href="javaScript:openTab('公告管理','noticeManage.jsp','icon-notice')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理公告</a>
 			</div>
 			<div title="新闻管理" data-options="iconCls:'icon-news'" style="padding: 10px;">
 				<a href="" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理新闻</a>
