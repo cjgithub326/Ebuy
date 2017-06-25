@@ -48,4 +48,45 @@ public interface NewsService {
 	 *
 	 */
 	public News getNewsById(int newsId);
+	
+	/**
+	 * 
+	 * @MethodName: getNewsCount
+	 * @Description: 获取新闻总数
+	 * @author jed
+	 * @date 2017年6月25日上午11:04:41
+	 * @param @param news
+	 * @param @return    
+	 * @return Long    返回类型
+	 * @param news
+	 * @return
+	 *
+	 */
+	public Long getNewsCount(News news);
+	
+	/**
+	 * 
+	 * @MethodName: saveNews
+	 * @Description: 保存新闻
+	 * @author jed
+	 * @date 2017年6月25日上午11:05:36
+	 * @param @param news    
+	 * @return void    返回类型
+	 * @param news
+	 *
+	 */
+	public void saveNews(News news);
+	
+	/**
+	 * 
+	 * @MethodName: delete
+	 * @Description: 删除新闻
+	 * @author jed
+	 * @date 2017年6月25日上午11:05:46
+	 * @param @param news    
+	 * @return void    返回类型
+	 * @param news
+	 *
+	 */
+	public void delete(News news);
 }

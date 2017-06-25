@@ -70,7 +70,7 @@
 				<a href="javaScript:openTab('公告管理','noticeManage.jsp','icon-notice')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理公告</a>
 			</div>
 			<div title="新闻管理" data-options="iconCls:'icon-news'" style="padding: 10px;">
-				<a href="" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理新闻</a>
+				<a href="javaScript:openTab('新闻管理','newsManage.jsp','icon-news')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理新闻</a>
 			</div>
 			<div title="标签管理" data-options="iconCls:'icon-tag'" style="padding: 10px;">
 				<a href="" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理标签</a>
