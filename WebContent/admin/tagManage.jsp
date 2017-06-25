@@ -16,29 +16,24 @@
 
   var url;
    
- //查询新闻信息  
- function searchNews(){
+ //查询标签信息  
+ function searchTag(){
 	 $("#dg").datagrid('load',{
-		 "news.title":$("#newsTitle").val().trim()
+		 "tag.name":$("#tagName").val().trim()
 	 });
  }
  
- //打开添加新闻信息对话框 
- function openNewsAddDialog(){
-	 $("#dlg").dialog("open").dialog("setTitle","添加新闻信息");
-	 url="news_save.action";
+ //打开添加标签信息对话框 
+ function openTagAddDialog(){
+	 $("#dlg").dialog("open").dialog("setTitle","添加标签信息");
+	 url="tag_save.action";
  }
  
- //保存新闻信息 
- function saveNews(){
+ //保存标签信息 
+ function saveTag(){
 	 $("#fm").form("submit",{
 		 url:url,
 	     onSubmit:function(){
-	    	 var content = CKEDITOR.instances.content.getData();
-	    	 if(content=null || content==""){
-	    		 $.messager.alert("系统提示","新闻内容不能为空！");
-				 return false;
-	    	 }
 	    	 return $(this).form("validate");
 	     },
 	     success:function(result){
@@ -58,34 +53,32 @@
  
   //重置 
   function resetValue(){
-		$("#title").val("");
-		$("#createTime").val("");
-		CKEDITOR.instances.content.setData("");
+		$("#name").val("");
+		$("#url").val("");
 	}
 	
   //取消 
-  function closeNewsDialog(){
+  function closeTagDialog(){
 		$("#dlg").dialog("close");
 		resetValue();
 	}
  
  
- //修改新闻信息  
- function openNewsModifyDialog(){
+ //修改标签信息  
+ function openTagModifyDialog(){
 	    var selectedRows=$("#dg").datagrid('getSelections');
 		if(selectedRows.length!=1){
 			$.messager.alert("系统提示","请选择一条要编辑的数据！");
 			return;
 		}
 		var row=selectedRows[0];
-		$("#dlg").dialog("open").dialog("setTitle","编辑新闻信息");
-		$("#title").val(row.title);
-		CKEDITOR.instances.content.setData(row.content);
-		$("#createTime").val(row.createTime);
-		url="news_save.action?news.id="+row.id;
+		$("#dlg").dialog("open").dialog("setTitle","编辑标签信息");
+		$("#name").val(row.name);
+		$("#url").val(row.url);
+		url="tag_save.action?tag.id="+row.id;
  }
- //删除新闻信息  
- function deleteNews(){
+ //删除标签信息  
+ function deleteTag(){
 	 var selectedRows=$("#dg").datagrid('getSelections');
 		if(selectedRows.length==0){
 			$.messager.alert("系统提示","请选择要删除的数据！ ");
@@ -98,7 +91,7 @@
 		var ids=strIds.join(",");
 		$.messager.confirm("系统提示","您确认要删除这<font color=red>"+selectedRows.length+"</font>条数据吗？",function(r){
 			if(r){
-				$.post("news_delete.action",{ids:ids},function(result){
+				$.post("tag_delete.action",{ids:ids},function(result){
 					if(result.success){
 						$.messager.alert("系统提示","数据已成功删除！");							
 						$("#dg").datagrid("reload");
@@ -110,60 +103,51 @@
 		});
  }
  
- function formatContent(val,row){
-	 if(val.length<=30){
-		 return val;
-	 }else{
-		 return val.substr(0,30)+"...";
-	 }
- }
  
 </script>
 </head>
 <body style="margin: 1px;">
-	<table id="dg" class="easyui-datagrid" title="新闻管理" fitColumns="true" url="news_list.action" pagination="true" rownumbers="true" fit="true" toolbar="#tb">
+	<table id="dg" class="easyui-datagrid" title="标签管理" fitColumns="true" url="tag_list.action" pagination="true" rownumbers="true" fit="true" toolbar="#tb">
 		<thead>
 			<tr>
 				<th field="cb" checkbox="true" align="center"></th>
 				<th field="id" width="50" align="center">编号</th>
-				<th field="title" width="100" align="center">新闻名称</th>
-				<th field="createTime" width="100" align="center">创建时间</th>
-				<th field="content" width="400" align="center" formatter="formatContent">内容</th>
+				<th field="name" width="100" align="center">标签名称</th>
+				<th field="url" width="300" align="center">标签地址</th>
 			</tr>
 		</thead>
 	</table>
 	<div id="tb">
 		<div>
-			<a href="javaScript:openNewsAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
-			<a href="javaScript:openNewsModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
-			<a href="javaScript:deleteNews()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
+			<a href="javaScript:openTagAddDialog()" class="easyui-linkbutton" iconCls="icon-add" plain="true">添加</a>
+			<a href="javaScript:openTagModifyDialog()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
+			<a href="javaScript:deleteTag()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
 		</div>
 		<div>
-			&nbsp;新闻名称：&nbsp;<input type="text" id="newsTitle" size="20" onkeydown="if(event.keyCode==13) searchNews()"/>
-			<a href="javaScript:searchNews()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+			&nbsp;标签名称：&nbsp;<input type="text" id="tagName" size="20" onkeydown="if(event.keyCode==13) searchTag()"/>
+			<a href="javaScript:searchTag()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
 		</div>
 	</div>
 	
-	<div id="dlg" class="easyui-dialog" style="width: 750px;height: 450px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
+	<div id="dlg" class="easyui-dialog" style="width: 450px;height: 250px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
 		<form id="fm" method="post">
 			<table cellspacing="8px">
 				<tr>
-				 	<td>新闻标题：</td>
-				 	<td colspan="4"><input type="text" id="title" name="news.title" class="easyui-validatebox" required="true" style="width: 325px"/></td>
+				 	<td>标签名称：</td>
+				 	<td colspan="4"><input type="text" id="name" name="tag.name" class="easyui-validatebox" required="true" /></td>
 				</tr>
 				<tr>
-				 	<td valign="top">新闻内容：</td>
+				 	<td valign="top">标签地址：</td>
 				 	<td colspan="4">
-				 		<textarea id="content" name="news.content" class="ckeditor"></textarea>
-				 		<input type="hidden" id="createTime" name="news.createTime"></input>
+				 		<input type="text" id="url" name="tag.url" class="easyui-validatebox" required="true" validtype="url" style="width:300px"></input>
 				 	</td>
 				</tr>
 			</table>
 		</form>
 	</div>
 	<div id="dlg-buttons">
-		<a href="javaScript:saveNews()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
-		<a href="javaScript:closeNewsDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+		<a href="javaScript:saveTag()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+		<a href="javaScript:closeTagDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
 	</div>
 </body>
 </html>

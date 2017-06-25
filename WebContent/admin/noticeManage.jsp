@@ -121,7 +121,7 @@
 </script>
 </head>
 <body style="margin: 1px;">
-	<table id="dg" class="easyui-datagrid" title="留言管理" fitColumns="true" url="notice_list.action" pagination="true" rownumbers="true" fit="true" toolbar="#tb">
+	<table id="dg" class="easyui-datagrid" title="公告管理" fitColumns="true" url="notice_list.action" pagination="true" rownumbers="true" fit="true" toolbar="#tb">
 		<thead>
 			<tr>
 				<th field="cb" checkbox="true" align="center"></th>

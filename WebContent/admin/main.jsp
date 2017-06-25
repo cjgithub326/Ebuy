@@ -73,7 +73,7 @@
 				<a href="javaScript:openTab('新闻管理','newsManage.jsp','icon-news')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理新闻</a>
 			</div>
 			<div title="标签管理" data-options="iconCls:'icon-tag'" style="padding: 10px;">
-				<a href="" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理标签</a>
+				<a href="javaScript:openTab('标签管理','tagManage.jsp','icon-tag')" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-manage'" style="width: 100px;">管理标签</a>
 			</div>
 			<div title="系统管理" data-options="iconCls:'icon-item'" style="padding: 10px;">
 				<a href="" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-modifyPassword'" style="width: 100px;">修改密码</a>

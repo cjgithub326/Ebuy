@@ -67,7 +67,7 @@ public class InitAction implements ServletContextListener,ApplicationContextAwar
 		
 		//获取标签,把标签加入缓存中
 		TagService tagService= (TagService) applicationContext.getBean("tagService");
-		List<Tag> tagList = tagService.findTagList();
+		List<Tag> tagList = tagService.findTagList(null,null);
 		application.setAttribute("tagList", tagList);
 		
 		//获取最新公告,把公告加入缓存中
