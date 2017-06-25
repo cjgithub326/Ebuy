@@ -165,6 +165,22 @@ public class UserAction extends ActionSupport implements ServletRequestAware{
 	
 	/**
 	 * 
+	 * @MethodName: logout2
+	 * @Description: 退出系统
+	 * @author jed
+	 * @date 2017年6月25日下午10:33:58
+	 * @param @return    
+	 * @return String    返回类型
+	 * @return
+	 *
+	 */
+	public String logout2(){
+		request.getSession().invalidate(); //session失效
+		return "logout2";
+	}
+	
+	/**
+	 * 
 	 * @MethodName: userCenter
 	 * @Description: 个人中心
 	 * @author jed
@@ -301,6 +317,28 @@ public class UserAction extends ActionSupport implements ServletRequestAware{
 	 */
 	public String saveUser() throws Exception{
 		userService.saveUser(user);
+		JSONObject result = new JSONObject();
+		result.put("success", true);
+		ResponseUtil.write(ServletActionContext.getResponse(), result);
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @MethodName: modifyPassword
+	 * @Description: 修改密码
+	 * @author jed
+	 * @date 2017年6月25日下午10:23:02
+	 * @param @return    
+	 * @return String    返回类型
+	 * @return
+	 * @throws Exception 
+	 *
+	 */
+	public String modifyPassword() throws Exception{
+		User currentUser = userService.getUserById(user.getId());
+		currentUser.setPassword(user.getPassword());
+		userService.saveUser(currentUser);
 		JSONObject result = new JSONObject();
 		result.put("success", true);
 		ResponseUtil.write(ServletActionContext.getResponse(), result);

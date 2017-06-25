@@ -13,7 +13,6 @@
 	}
 
 	function checkForm(){
-		debugger
 		 var userName=$("#userName").val();
 		 var password=$("#password").val();
 		 var imageCode=$("#imageCode").val();
